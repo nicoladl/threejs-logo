@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>threejs - geometry</title>
+
+    <style>
+    body{
+      margin: 0;
+      overflow: hidden;
+  }
+</style>
+</head>
+<body>
+
+    <canvas id="myCanvas"></canvas>
+
+    <script src="three.js"></script>
+
+    <script>
+
+        function addControls() {
+            controls = new THREE.TrackballControls(camera, renderer.domElement);
+
+            controls.rotateSpeed = 1;
+            controls.zoomSpeed = .5;
+            controls.panSpeed = 1;
+
+            controls.noZoom = false;
+            controls.noPan = false;
+            controls.noRotate = false;
+
+            controls.staticMoving = false;
+            controls.dynamicDampingFactor = 0.3;
+
+        }
+
+        var renderer,
+        scene,
+        camera,
+        myCanvas = document.getElementById('myCanvas');
+
+    //RENDERER
+    renderer = new THREE.WebGLRenderer({canvas: myCanvas, antialias: true});
+    renderer.setClearColor(0x000000);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    //CAMERA
+    camera = new THREE.PerspectiveCamera(470, window.innerWidth / window.innerHeight, 0.1, 300);
+
+    //SCENE
+    scene = new THREE.Scene();
+
+    //LIGHTS
+    var light = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(light);
+
+    var light2 = new THREE.PointLight(0xffffff, 0.5);
+    scene.add(light2);
+
+    var x = -25;
+    var y = -25;
+    var letter = new THREE.Shape();
+    letter.moveTo( x, y + 20 );
+    letter.lineTo( x, y + 20 );
+    letter.quadraticCurveTo( x, y + 40, x + 20, y + 40 );
+    letter.lineTo( x + 20, y );
+    letter.quadraticCurveTo( x, y, x, y + 20 );
+    letter.lineTo( x + 40, y + 20 );
+    letter.quadraticCurveTo( x + 40, y, x + 20, y );
+    letter.lineTo( x + 20, y + 40 );
+    letter.quadraticCurveTo( x + 40, y + 40, x + 40, y + 20 );
+
+    // var letterHole = new THREE.Path();
+    // letterHole.moveTo( x + 20, y + 20 );
+    // letterHole.lineTo( x, y );
+    // letterHole.quadraticCurveTo( x, y + 20, x + 10, y + 20 );
+    // letterHole.lineTo( x + 10, y );
+    // letterHole.quadraticCurveTo( x, y, x, y + 10 );
+    // letterHole.lineTo( x + 20, y + 10 );
+    // letterHole.quadraticCurveTo( x + 20, y, x + 10, y );
+    // letterHole.lineTo( x + 10, y + 20 );
+    // letterHole.quadraticCurveTo( x + 20, y + 20, x + 20, y + 10 );
+
+    // // punch the hole
+    // letter.holes.push(letterHole);
+
+    var extrudeSettings = { amount: 8, bevelEnabled: true, bevelSegments: 2, steps: 2, bevelSize: 1, bevelThickness: 1 };
+    var geometry = new THREE.ExtrudeGeometry( letter, extrudeSettings );    //ExtrudeGeometry(shapes, options)
+
+    var material = new THREE.MeshLambertMaterial({color: 0xF3FFE2, wireframe: true});
+    var mesh = new THREE.Mesh(geometry, material);
+    mesh.position.z = -50;
+
+    var geometry2 = new THREE.BoxGeometry( 1, 1, 1 );
+    var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+    var cube = new THREE.Mesh( geometry2, material );
+    scene.add( cube );
+
+    scene.add(mesh);
+
+
+    //RENDER LOOP
+    render();
+
+    var delta = 0;
+    function render() {
+    	// mesh.rotation.x += 0.01;
+    	mesh.rotation.y += 0.01;
+
+    	renderer.render(scene, camera);
+
+    	requestAnimationFrame(render);
+    }
+
+</script>
+</body>
+</html>
