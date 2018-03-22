@@ -1,42 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Octoplus logo</title>
+	<title>Octoplus logo</title>
 
-  <style>
-  body{
-    margin: 0
-    overflow: hidden
-  }
+	<style>
+	body{
+		margin: 0
+		overflow: hidden
+	}
 </style>
 </head>
 <body>
 
-  <canvas id="myCanvas"></canvas>
+	<canvas id="myCanvas"></canvas>
 
-  <script src="three.js"></script>
-  <script>
-
-    function addControls() {
-      controls = new THREE.TrackballControls(camera, renderer.domElement)
-
-      controls.rotateSpeed = 1
-      controls.zoomSpeed = .5
-      controls.panSpeed = 1
-
-      controls.noZoom = false
-      controls.noPan = false
-      controls.noRotate = false
-
-      controls.staticMoving = false
-      controls.dynamicDampingFactor = 0.3
-
-    }
-
-    var renderer,
-        scene,
-        camera,
-        myCanvas = document.getElementById('myCanvas')
+	<script src="three.js"></script>
+	<script>
+		var renderer,
+			scene,
+			camera,
+			myCanvas = document.getElementById('myCanvas')
 
     //RENDERER
     renderer = new THREE.WebGLRenderer({canvas: myCanvas, antialias: true})
@@ -45,20 +28,13 @@
     renderer.setSize(window.innerWidth, window.innerHeight)
 
     //CAMERA
-    camera = new THREE.PerspectiveCamera(470, window.innerWidth / window.innerHeight, 0.1, 300)
+    camera = new THREE.PerspectiveCamera(450, window.innerWidth / window.innerHeight, 0.1, 300)
 
     //SCENE
     scene = new THREE.Scene()
 
-    //LIGHTS
-    var light = new THREE.AmbientLight(0x000000, 0.5)
-    scene.add(light)
-
-    var light2 = new THREE.PointLight(0x000000, 0.5)
-    scene.add(light2)
-
-    var x = -25
-    var y = -25
+    var x = -20
+    var y = -20
     var letter = new THREE.Shape()
     letter.moveTo( x, y + 20 )
     letter.lineTo( x, y + 20 )
@@ -70,21 +46,23 @@
     letter.lineTo( x + 20, y + 40 )
     letter.quadraticCurveTo( x + 40, y + 40, x + 40, y + 20 )
 
-    // var letterHole = new THREE.Path()
-    // letterHole.moveTo( x, y + 20 )
-    // letterHole.lineTo( x, y + 20 )
-    // letterHole.quadraticCurveTo( x, y + 20, x, y + 20 )
-    // letterHole.lineTo( x, y )
-    // letterHole.quadraticCurveTo( x, y, x, y + 20 )
-    // letterHole.lineTo( x + 40, y + 20 )
-    // letterHole.quadraticCurveTo( x + 40, y, x, y )
-    // letterHole.lineTo( x, y + 20 )
-    // letterHole.quadraticCurveTo( x + 40, y + 40, x + 40, y + 20 )
+    var letterHole = new THREE.Path()
+    var a = -10
+    var b = -10
+    letterHole.moveTo( a, b + 10 )
+    letterHole.lineTo( a, b + 10 )
+    letterHole.quadraticCurveTo( a, b + 20, a + 10, b + 20 )
+    letterHole.lineTo( a + 10, b )
+    letterHole.quadraticCurveTo( a, b, a, b + 10 )
+    letterHole.lineTo( a + 20, b + 10 )
+    letterHole.quadraticCurveTo( a + 20, b, a + 10, b )
+    letterHole.lineTo( a + 10, b + 20 )
+    letterHole.quadraticCurveTo( a + 20, b + 20, a + 20, b + 10 )
 
     // // punch the hole
-    // letter.holes.push(letterHole)
+    letter.holes.push(letterHole)
 
-    var extrudeSettings = { amount: 8, bevelEnabled: true, bevelSegments: 2, steps: 2, bevelSize: 1, bevelThickness: 1 }
+    var extrudeSettings = { amount: 5, bevelEnabled: true, bevelSegments: 2, steps: 2, bevelSize: 1, bevelThickness: 1 }
     var geometry = new THREE.ExtrudeGeometry( letter, extrudeSettings )
 
     var materialOctoplus = new THREE.MeshLambertMaterial({ color: 0xF3FFE2, wireframe: true })
@@ -93,17 +71,17 @@
     var octoplus = new THREE.Mesh(geometry, materialOctoplus)
     octoplus.position.z = -50
 
-    var plus1 = new THREE.BoxGeometry( 20, 5, 8 );
+    var plus1 = new THREE.BoxGeometry( 15, 5, 5 );
     var plusHorizontal = new THREE.Mesh( plus1, materialPlus );
     plusHorizontal.position.z = -50
-    plusHorizontal.position.x = 50
-    plusHorizontal.position.y = 10
+    plusHorizontal.position.x = 35
+    plusHorizontal.position.y = 15
 
-    var plus1 = new THREE.BoxGeometry( 10, 20, 5);
+    var plus1 = new THREE.BoxGeometry( 5, 15, 5);
     var plusVertical = new THREE.Mesh( plus1, materialPlus );
     plusVertical.position.z = -50
-    plusVertical.position.x = 50
-    plusVertical.position.y = 10
+    plusVertical.position.x = 35
+    plusVertical.position.y = 15
 
     scene.add(plusHorizontal);
     scene.add(plusVertical);
@@ -115,8 +93,8 @@
     var delta = 0
     function render() {
     	// mesh.rotation.x += 0.01
-      octoplus.rotation.y += 0.01
-      plusHorizontal.rotation.y += 0.01
+    	octoplus.rotation.y += 0.01
+    	plusHorizontal.rotation.y += 0.01
     	plusVertical.rotation.y += 0.01
 
     	renderer.render(scene, camera)
